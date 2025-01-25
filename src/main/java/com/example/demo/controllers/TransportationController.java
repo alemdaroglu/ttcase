@@ -1,10 +1,12 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dtos.TransportationDTO;
 import com.example.demo.models.Transportation;
 import com.example.demo.repositories.TransportationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +22,11 @@ public class TransportationController {
 
     // Get all transportations
     @GetMapping
-    public List<Transportation> getAllTransportations() {
-        return transportationRepository.findAll();
+    public List<TransportationDTO> getAllTransportations() {
+        List<Transportation> transportations = transportationRepository.findAll();
+        List<TransportationDTO> transportationDTOs = new ArrayList<>();
+        transportations.forEach(t -> transportationDTOs.add(t.convertToDTO()));
+        return transportationDTOs;
     }
 
     // Get a single transportation by ID

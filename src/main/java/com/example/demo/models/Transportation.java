@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.dtos.TransportationDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -54,6 +55,15 @@ public class Transportation {
         return this.destinationLocationId;
     }
 
+    public Location getOriginLocation() {
+        return this.originLocation;
+    }
+
+    public Location getDestinationLocation() {
+        return this.destinationLocation;
+    }
+
+
     public String getTransportationType() {
         return transportationType;
     }
@@ -70,6 +80,15 @@ public class Transportation {
         this.destinationLocationId = id;
     }
 
+    public void setOriginLocation(Location originLocation) {
+        this.originLocation = originLocation;
+    }
+
+    public void setDestinationLocation(Location destinationLocation) {
+        this.destinationLocation = destinationLocation;
+    }
+
+
     public void setTransportationType(String transportationType) {
         this.transportationType = transportationType;
     }
@@ -83,6 +102,15 @@ public class Transportation {
             operatingDays.setTransportation(this);
         }
         this.operatingDays = operatingDays;
+    }
+
+    public TransportationDTO convertToDTO() {
+        return new TransportationDTO(
+                this.getId(),
+                this.getOriginLocation(),
+                this.getDestinationLocation(),
+                this.getTransportationType()
+        );
     }
 
     @Override
