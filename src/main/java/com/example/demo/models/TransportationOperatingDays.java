@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -13,8 +14,10 @@ public class TransportationOperatingDays {
     @Column(name="id", nullable=false, unique=true)
     private Long id;
 
-    @Column(name="transportation_id", nullable=false, unique = true)
-    private Long transportationId;
+    @OneToOne
+    @JoinColumn(name = "transportation_id", nullable = false, unique = true)
+    @JsonIgnore
+    private Transportation transportation;
 
     @Column(name="monday", nullable=false)
     private Boolean monday = false;
@@ -58,9 +61,6 @@ public class TransportationOperatingDays {
     public Long getId() {
         return this.id;
     }
-    public Long getTransportationId() {
-        return this.transportationId;
-    }
 
 
     public Boolean getMonday() {
@@ -88,9 +88,7 @@ public class TransportationOperatingDays {
     public void setId(Long id) {
         this.id = id;
     }
-    public void setTransportationIdId(Long transportationId) {
-        this.transportationId = transportationId;
-    }
+
     public void setMonday(Boolean monday) {
         this.monday = monday;
     }
@@ -113,6 +111,14 @@ public class TransportationOperatingDays {
         this.sunday = sunday;
     }
 
+    public Transportation getTransportation() {
+        return this.transportation;
+    }
+
+    public void setTransportation(Transportation transportation) {
+        this.transportation = transportation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -120,7 +126,6 @@ public class TransportationOperatingDays {
         if (!(o instanceof TransportationOperatingDays tod))
             return false;
         return Objects.equals(this.id, tod.id)
-                && Objects.equals(this.transportationId, tod.transportationId)
                 && Objects.equals(this.monday, tod.monday)
                 && Objects.equals(this.tuesday, tod.tuesday)
                 && Objects.equals(this.wednesday, tod.wednesday)
@@ -133,7 +138,7 @@ public class TransportationOperatingDays {
     @Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.transportationId, this.monday, this.tuesday,
+                this.id, this.monday, this.tuesday,
                 this.wednesday, this.thursday, this.friday, this.saturday, this.sunday);
     }
 

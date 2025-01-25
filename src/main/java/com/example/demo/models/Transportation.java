@@ -20,12 +20,14 @@ public class Transportation {
     @Column(name="transportation_type", nullable=false)
     private String transportationType;
 
+    @OneToOne(mappedBy = "transportation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private TransportationOperatingDays operatingDays;
+
     public Transportation() {
 
     }
 
     Transportation(Long originLocationId, Long destinationLocationId, String transportationType) {
-
         this.originLocationId = originLocationId;
         this.destinationLocationId = destinationLocationId;
         this.transportationType = transportationType;
@@ -64,6 +66,16 @@ public class Transportation {
         this.transportationType = transportationType;
     }
 
+    public TransportationOperatingDays getOperatingDays() {
+        return operatingDays;
+    }
+
+    public void setOperatingDays(TransportationOperatingDays operatingDays) {
+        if (operatingDays != null) {
+            operatingDays.setTransportation(this);
+        }
+        this.operatingDays = operatingDays;
+    }
 
     @Override
     public boolean equals(Object o) {
