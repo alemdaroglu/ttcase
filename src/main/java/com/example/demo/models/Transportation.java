@@ -23,6 +23,14 @@ public class Transportation {
     @OneToOne(mappedBy = "transportation", cascade = CascadeType.ALL, orphanRemoval = true)
     private TransportationOperatingDays operatingDays;
 
+    @ManyToOne
+    @JoinColumn(name = "origin_location_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Location originLocation;
+
+    @ManyToOne
+    @JoinColumn(name = "destination_location_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Location destinationLocation;
+
     public Transportation() {
 
     }
