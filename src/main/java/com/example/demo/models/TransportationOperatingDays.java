@@ -11,10 +11,6 @@ public class TransportationOperatingDays {
     private @Id
     @GeneratedValue Long id;
 
-    @OneToOne(mappedBy = "operatingDays")
-    @JoinColumn(name = "operating_days_id")
-    private Transportation transportation;
-
     private Boolean monday;
     private Boolean tuesday;
     private Boolean wednesday;
@@ -50,6 +46,7 @@ public class TransportationOperatingDays {
     public Long getId() {
         return this.id;
     }
+
 
     public Boolean getMonday() {
         return this.monday;

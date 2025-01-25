@@ -14,18 +14,20 @@ public class Transportation {
     private String destinationLocation;
     private String transportationType;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
     private TransportationOperatingDays operatingDays;
 
     public Transportation() {
 
     }
 
-    Transportation(String originLocation, String destinationLocation, String transportationType) {
+    Transportation(String originLocation, String destinationLocation, String transportationType, TransportationOperatingDays operatingDays) {
 
         this.originLocation = originLocation;
         this.destinationLocation = destinationLocation;
         this.transportationType = transportationType;
+        this.operatingDays = operatingDays;
     }
 
 
@@ -62,6 +64,14 @@ public class Transportation {
     }
 
 
+    public TransportationOperatingDays getOperatingDays() {
+        return operatingDays;
+    }
+
+    public void setOperatingDays(TransportationOperatingDays operatingDays) {
+        this.operatingDays = operatingDays;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -71,7 +81,8 @@ public class Transportation {
         return Objects.equals(this.id, transportation.id)
                 && Objects.equals(this.originLocation, transportation.originLocation)
                 && Objects.equals(this.destinationLocation, transportation.destinationLocation)
-                && Objects.equals(this.transportationType, transportation.transportationType);
+                && Objects.equals(this.transportationType, transportation.transportationType)&&
+                Objects.equals(operatingDays, transportation.operatingDays);
     }
 
     @Override
@@ -80,7 +91,8 @@ public class Transportation {
                 this.id,
                 this.originLocation,
                 this.destinationLocation,
-                this.transportationType);
+                this.transportationType,
+                operatingDays);
     }
 
     @Override
