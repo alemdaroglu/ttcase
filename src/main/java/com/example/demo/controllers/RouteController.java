@@ -1,9 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dtos.Route;
-import com.example.demo.models.Location;
-import com.example.demo.repositories.LocationRepository;
-import com.example.demo.repositories.TransportationRepository;
+import com.example.demo.dtos.RouteDTO;
 import com.example.demo.services.interfaces.IRouteService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +22,7 @@ public class RouteController {
 
     // Get all locations
     @GetMapping
-    public List<Route> getMatchingRoutes(
+    public List<RouteDTO> getMatchingRoutes(
             @RequestParam String origin,
             @RequestParam String destination,
             @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {

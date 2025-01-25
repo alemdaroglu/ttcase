@@ -1,9 +1,9 @@
 package com.example.demo.services.interfaces;
 
-import com.example.demo.dtos.Route;
+import com.example.demo.dtos.RouteDTO;
 
 import java.util.List;
 
 public interface IRouteService {
-    public List<Route> findMatchingRoutes();
+    public List<RouteDTO> findMatchingRoutes();
 }

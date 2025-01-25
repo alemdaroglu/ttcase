@@ -1,4 +1,4 @@
 package com.example.demo.dtos;
 
-public class Route {
+public class RouteDTO {
 }
