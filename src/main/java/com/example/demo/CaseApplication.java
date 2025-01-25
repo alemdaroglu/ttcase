@@ -11,11 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @ComponentScan(basePackages = "com.example")
 public class CaseApplication {
 
-	@RequestMapping("/")
-	public String home() {
-		return "Hello World";
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(CaseApplication.class, args);
 	}
