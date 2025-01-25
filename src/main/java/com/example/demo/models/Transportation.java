@@ -20,21 +20,15 @@ public class Transportation {
     @Column(name="transportation_type", nullable=false)
     private String transportationType;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
-    private TransportationOperatingDays operatingDays;
-
     public Transportation() {
 
     }
 
-    Transportation(Long originLocationId, Long destinationLocationId, String transportationType,
-                   TransportationOperatingDays operatingDays) {
+    Transportation(Long originLocationId, Long destinationLocationId, String transportationType) {
 
         this.originLocationId = originLocationId;
         this.destinationLocationId = destinationLocationId;
         this.transportationType = transportationType;
-        this.operatingDays = operatingDays;
     }
 
 
@@ -71,14 +65,6 @@ public class Transportation {
     }
 
 
-    public TransportationOperatingDays getOperatingDays() {
-        return operatingDays;
-    }
-
-    public void setOperatingDays(TransportationOperatingDays operatingDays) {
-        this.operatingDays = operatingDays;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -88,8 +74,7 @@ public class Transportation {
         return Objects.equals(this.id, transportation.id)
                 && Objects.equals(this.originLocationId, transportation.originLocationId)
                 && Objects.equals(this.destinationLocationId, transportation.destinationLocationId)
-                && Objects.equals(this.transportationType, transportation.transportationType)&&
-                Objects.equals(operatingDays, transportation.operatingDays);
+                && Objects.equals(this.transportationType, transportation.transportationType);
     }
 
     @Override
@@ -98,8 +83,7 @@ public class Transportation {
                 this.id,
                 this.originLocationId,
                 this.destinationLocationId,
-                this.transportationType,
-                operatingDays);
+                this.transportationType);
     }
 
     @Override
