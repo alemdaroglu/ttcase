@@ -45,8 +45,8 @@ public class TransportationController {
             @RequestBody Transportation updatedTransportation) {
         return transportationRepository.findById(id)
                 .map(existingTransportation -> {
-                    existingTransportation.setOriginLocation(updatedTransportation.getOriginLocation());
-                    existingTransportation.setDestinationLocation(updatedTransportation.getDestinationLocation());
+                    existingTransportation.setOriginLocationId(updatedTransportation.getOriginLocationId());
+                    existingTransportation.setDestinationLocationId(updatedTransportation.getDestinationLocationId());
                     existingTransportation.setTransportationType(updatedTransportation.getTransportationType());
                     Transportation savedTransportation = transportationRepository.save(existingTransportation);
                     return ResponseEntity.ok(savedTransportation);

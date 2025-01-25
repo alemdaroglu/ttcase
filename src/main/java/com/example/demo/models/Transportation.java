@@ -8,10 +8,16 @@ import java.util.Objects;
 @Entity
 public class Transportation {
 
-    private @Id
-    @GeneratedValue Long id;
-    private String originLocation;
-    private String destinationLocation;
+    @Id
+    @GeneratedValue
+    @Column(name="id", nullable=false, unique=true)
+    private Long id;
+
+    @Column(name="origin_location_id", nullable=false)
+    private Long originLocationId;
+    @Column(name="destination_location_id", nullable=false)
+    private Long destinationLocationId;
+    @Column(name="transportation_type", nullable=false)
     private String transportationType;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -22,10 +28,11 @@ public class Transportation {
 
     }
 
-    Transportation(String originLocation, String destinationLocation, String transportationType, TransportationOperatingDays operatingDays) {
+    Transportation(Long originLocationId, Long destinationLocationId, String transportationType,
+                   TransportationOperatingDays operatingDays) {
 
-        this.originLocation = originLocation;
-        this.destinationLocation = destinationLocation;
+        this.originLocationId = originLocationId;
+        this.destinationLocationId = destinationLocationId;
         this.transportationType = transportationType;
         this.operatingDays = operatingDays;
     }
@@ -35,12 +42,12 @@ public class Transportation {
         return this.id;
     }
 
-    public String getOriginLocation() {
-        return this.originLocation;
+    public Long getOriginLocationId() {
+        return this.originLocationId;
     }
 
-    public String getDestinationLocation() {
-        return this.destinationLocation;
+    public Long getDestinationLocationId() {
+        return this.destinationLocationId;
     }
 
     public String getTransportationType() {
@@ -51,12 +58,12 @@ public class Transportation {
         this.id = id;
     }
 
-    public void setOriginLocation(String name) {
-        this.originLocation = name;
+    public void setOriginLocationId(Long id) {
+        this.originLocationId = id;
     }
 
-    public void setDestinationLocation(String country) {
-        this.destinationLocation = country;
+    public void setDestinationLocationId(Long id) {
+        this.destinationLocationId = id;
     }
 
     public void setTransportationType(String transportationType) {
@@ -79,8 +86,8 @@ public class Transportation {
         if (!(o instanceof Transportation transportation))
             return false;
         return Objects.equals(this.id, transportation.id)
-                && Objects.equals(this.originLocation, transportation.originLocation)
-                && Objects.equals(this.destinationLocation, transportation.destinationLocation)
+                && Objects.equals(this.originLocationId, transportation.originLocationId)
+                && Objects.equals(this.destinationLocationId, transportation.destinationLocationId)
                 && Objects.equals(this.transportationType, transportation.transportationType)&&
                 Objects.equals(operatingDays, transportation.operatingDays);
     }
@@ -89,8 +96,8 @@ public class Transportation {
     public int hashCode() {
         return Objects.hash(
                 this.id,
-                this.originLocation,
-                this.destinationLocation,
+                this.originLocationId,
+                this.destinationLocationId,
                 this.transportationType,
                 operatingDays);
     }

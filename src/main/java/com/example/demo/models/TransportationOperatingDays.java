@@ -8,16 +8,25 @@ import java.util.Objects;
 @Entity
 public class TransportationOperatingDays {
 
-    private @Id
-    @GeneratedValue Long id;
+    @Id
+    @GeneratedValue
+    @Column(name="id", nullable=false, unique=true)
+    private Long id;
 
-    private Boolean monday;
-    private Boolean tuesday;
-    private Boolean wednesday;
-    private Boolean thursday;
-    private Boolean friday;
-    private Boolean saturday;
-    private Boolean sunday;
+    @Column(name="monday", nullable=false)
+    private Boolean monday = false;
+    @Column(name="tuesday", nullable=false)
+    private Boolean tuesday = false;
+    @Column(name="wednesday", nullable=false)
+    private Boolean wednesday = false;
+    @Column(name="thursday", nullable=false)
+    private Boolean thursday = false;
+    @Column(name="friday", nullable=false)
+    private Boolean friday = false;
+    @Column(name="saturday", nullable=false)
+    private Boolean saturday = false;
+    @Column(name="sunday", nullable=false)
+    private Boolean sunday = false;
 
 
     public TransportationOperatingDays() {
