@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.dtos.TransportationOperatingDaysDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -39,14 +40,16 @@ public class TransportationOperatingDays {
 
     }
 
-    TransportationOperatingDays(
+    public TransportationOperatingDays(
             Boolean monday,
             Boolean tuesday,
             Boolean wednesday,
             Boolean thursday,
             Boolean friday,
             Boolean saturday,
-            Boolean sunday) {
+            Boolean sunday,
+            Transportation transportation
+            ) {
 
         this.monday = monday;
         this.tuesday = tuesday;
@@ -55,6 +58,7 @@ public class TransportationOperatingDays {
         this.friday = friday;
         this.saturday = saturday;
         this.sunday = sunday;
+        this.transportation = transportation;
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.dtos.LocationDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,13 +30,13 @@ public class Location {
 
     }
 
-    Location(String name, String country, String city, String locationCode) {
-
+    public Location(String name, String country, String city, String locationCode) {
         this.name = name;
         this.country = country;
         this.city = city;
         this.locationCode = locationCode;
     }
+
 
 
     public Long getId() {

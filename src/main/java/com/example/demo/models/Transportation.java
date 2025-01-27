@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import com.example.demo.dtos.TransportationDTO;
+import com.example.demo.enums.TransportationType;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -14,45 +15,39 @@ public class Transportation {
     @Column(name="id", nullable=false, unique=true)
     private Long id;
 
-    @Column(name="origin_location_id", nullable=false)
-    private Long originLocationId;
-    @Column(name="destination_location_id", nullable=false)
-    private Long destinationLocationId;
-    @Column(name="transportation_type", nullable=false)
-    private String transportationType;
+    @Column(name = "transportation_type", nullable = false)
+    @Enumerated(EnumType.STRING) // This ensures the enum is stored as a string in the database
+    private TransportationType transportationType;
 
     @OneToOne(mappedBy = "transportation", cascade = CascadeType.ALL, orphanRemoval = true)
     private TransportationOperatingDays operatingDays;
 
     @ManyToOne
-    @JoinColumn(name = "origin_location_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "origin_location_id", referencedColumnName = "id")
     private Location originLocation;
 
     @ManyToOne
-    @JoinColumn(name = "destination_location_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "destination_location_id", referencedColumnName = "id")
     private Location destinationLocation;
 
     public Transportation() {
 
     }
 
-    Transportation(Long originLocationId, Long destinationLocationId, String transportationType) {
-        this.originLocationId = originLocationId;
-        this.destinationLocationId = destinationLocationId;
+    public Transportation(
+            Location originLocation,
+            Location destinationLocation,
+            TransportationType transportationType,
+            TransportationOperatingDays operatingDays) {
         this.transportationType = transportationType;
+        this.originLocation = originLocation;
+        this.destinationLocation = destinationLocation;
+        this.operatingDays = operatingDays;
     }
 
 
     public Long getId() {
         return this.id;
-    }
-
-    public Long getOriginLocationId() {
-        return this.originLocationId;
-    }
-
-    public Long getDestinationLocationId() {
-        return this.destinationLocationId;
     }
 
     public Location getOriginLocation() {
@@ -64,20 +59,12 @@ public class Transportation {
     }
 
 
-    public String getTransportationType() {
+    public TransportationType getTransportationType() {
         return transportationType;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setOriginLocationId(Long id) {
-        this.originLocationId = id;
-    }
-
-    public void setDestinationLocationId(Long id) {
-        this.destinationLocationId = id;
     }
 
     public void setOriginLocation(Location originLocation) {
@@ -89,7 +76,7 @@ public class Transportation {
     }
 
 
-    public void setTransportationType(String transportationType) {
+    public void setTransportationType(TransportationType transportationType) {
         this.transportationType = transportationType;
     }
 
@@ -104,15 +91,6 @@ public class Transportation {
         this.operatingDays = operatingDays;
     }
 
-    public TransportationDTO convertToDTO() {
-        return new TransportationDTO(
-                this.getId(),
-                this.getOriginLocation(),
-                this.getDestinationLocation(),
-                this.getTransportationType()
-        );
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -120,8 +98,6 @@ public class Transportation {
         if (!(o instanceof Transportation transportation))
             return false;
         return Objects.equals(this.id, transportation.id)
-                && Objects.equals(this.originLocationId, transportation.originLocationId)
-                && Objects.equals(this.destinationLocationId, transportation.destinationLocationId)
                 && Objects.equals(this.transportationType, transportation.transportationType);
     }
 
@@ -129,8 +105,6 @@ public class Transportation {
     public int hashCode() {
         return Objects.hash(
                 this.id,
-                this.originLocationId,
-                this.destinationLocationId,
                 this.transportationType);
     }
 

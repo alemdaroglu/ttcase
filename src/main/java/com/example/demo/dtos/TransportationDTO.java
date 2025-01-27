@@ -1,23 +1,27 @@
 package com.example.demo.dtos;
 
-import com.example.demo.models.Location;
+import com.example.demo.enums.TransportationType;
+import com.example.demo.models.Transportation;
 
 public class TransportationDTO {
+    private Long id; // Optional for responses
+    private LocationDTO originLocation; // Full Location for responses
+    private LocationDTO destinationLocation; // Full Location for responses
+    private TransportationType transportationType;
+    private TransportationOperatingDaysDTO operatingDays; // Embedded operating days
 
-    private Long id;
-    private Location originLocation;
-    private Location destinationLocation;
-    private String transportationType;
+    public TransportationDTO() {
+    }
 
-    // Constructor
-    public TransportationDTO(Long id, Location originLocation, Location destinationLocation, String transportationType) {
+    public TransportationDTO(Long id, LocationDTO originLocation, LocationDTO destinationLocation, TransportationType transportationType, TransportationOperatingDaysDTO operatingDays) {
         this.id = id;
         this.originLocation = originLocation;
         this.destinationLocation = destinationLocation;
         this.transportationType = transportationType;
+        this.operatingDays = operatingDays;
     }
 
-    // Getters and Setters
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -26,27 +30,35 @@ public class TransportationDTO {
         this.id = id;
     }
 
-    public Location getOriginLocation() {
+    public LocationDTO getOriginLocation() {
         return originLocation;
     }
 
-    public void setOriginLocation(Location originLocation) {
+    public void setOriginLocation(LocationDTO originLocation) {
         this.originLocation = originLocation;
     }
 
-    public Location getDestinationLocation() {
+    public LocationDTO getDestinationLocation() {
         return destinationLocation;
     }
 
-    public void setDestinationLocation(Location destinationLocation) {
+    public void setDestinationLocation(LocationDTO destinationLocation) {
         this.destinationLocation = destinationLocation;
     }
 
-    public String getTransportationType() {
+    public TransportationType getTransportationType() {
         return transportationType;
     }
 
-    public void setTransportationType(String transportationType) {
+    public void setTransportationType(TransportationType transportationType) {
         this.transportationType = transportationType;
+    }
+
+    public TransportationOperatingDaysDTO getOperatingDays() {
+        return operatingDays;
+    }
+
+    public void setOperatingDays(TransportationOperatingDaysDTO operatingDays) {
+        this.operatingDays = operatingDays;
     }
 }
