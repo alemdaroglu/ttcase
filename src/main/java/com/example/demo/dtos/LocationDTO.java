@@ -1,12 +1,17 @@
 package com.example.demo.dtos;
 
 import com.example.demo.models.Location;
+import jakarta.validation.constraints.NotBlank;
 
 public class LocationDTO {
     private Long id; // Optional for responses; can be null for creation
+    @NotBlank(message = "Name is required")
     private String name;
+    @NotBlank(message = "Country is required")
     private String country;
+    @NotBlank(message = "City is required")
     private String city;
+    @NotBlank(message = "Location Code is required")
     private String locationCode;
 
     public LocationDTO() {

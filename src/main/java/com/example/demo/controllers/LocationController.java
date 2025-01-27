@@ -4,7 +4,9 @@ import com.example.demo.dtos.LocationDTO;
 import com.example.demo.mappers.LocationMapper;
 import com.example.demo.models.Location;
 import com.example.demo.repositories.LocationRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +25,11 @@ public class LocationController {
 
     // Get all locations
     @GetMapping
-    public List<LocationDTO> getAllLocations() {
-        return locationRepository.findAll()
+    public ResponseEntity<List<LocationDTO>> getAllLocations() {
+        return ResponseEntity.ok(locationRepository.findAll()
                 .stream()
                 .map(LocationMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     // Get a single location by ID
@@ -41,8 +43,9 @@ public class LocationController {
 
     // Create a new location
     @PostMapping
-    public LocationDTO createLocation(@RequestBody LocationDTO locationDTO) {
-        return LocationMapper.toDto(locationRepository.save(LocationMapper.toEntity(locationDTO)));
+    public ResponseEntity<LocationDTO> createLocation(@Valid @RequestBody LocationDTO locationDTO) {
+        Location savedLocation = locationRepository.save(LocationMapper.toEntity(locationDTO));
+        return ResponseEntity.status(201).body(LocationMapper.toDto(savedLocation));
     }
 
     // Update an existing location

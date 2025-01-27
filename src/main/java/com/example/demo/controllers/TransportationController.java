@@ -9,7 +9,9 @@ import com.example.demo.models.Location;
 import com.example.demo.models.Transportation;
 import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,11 +32,11 @@ public class TransportationController {
 
     // Get all transportations
     @GetMapping
-    public List<TransportationDTO> getAllTransportations() {
-        return transportationRepository.findAll()
+    public ResponseEntity<List<TransportationDTO>> getAllTransportations() {
+        return ResponseEntity.ok(transportationRepository.findAll()
                 .stream()
                 .map(TransportationMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     // Get a single transportation by ID
@@ -48,11 +50,12 @@ public class TransportationController {
 
     // Create a new transportation
     @PostMapping
-    public TransportationDTO createTransportation(@RequestBody TransportationCreateDTO transportationCreateDTO) {
+    public ResponseEntity<TransportationDTO> createTransportation(@Valid @RequestBody TransportationCreateDTO transportationCreateDTO) {
         Transportation transportation = TransportationCreateMapper.toEntity(
                 transportationCreateDTO,
                 locationRepository);
-        return TransportationMapper.toDto(transportationRepository.save(transportation));
+        Transportation savedTransportation = transportationRepository.save(transportation);
+        return ResponseEntity.status(201).body(TransportationMapper.toDto(savedTransportation));
     }
 
     // Update an existing transportation

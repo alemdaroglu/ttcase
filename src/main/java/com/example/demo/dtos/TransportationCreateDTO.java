@@ -2,11 +2,16 @@ package com.example.demo.dtos;
 
 import com.example.demo.dtos.TransportationOperatingDaysDTO;
 import com.example.demo.enums.TransportationType;
+import jakarta.validation.constraints.NotNull;
 
 public class TransportationCreateDTO {
+    @NotNull(message = "Origin Location ID is required")
     private Long originLocationId;
+    @NotNull(message = "Destination Location ID is required")
     private Long destinationLocationId;
+    @NotNull
     private TransportationType transportationType;
+    @NotNull(message = "Operating days are required")
     private TransportationOperatingDaysDTO operatingDays;
 
     public TransportationCreateDTO() {}
