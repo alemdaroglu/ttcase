@@ -7,6 +7,7 @@ import com.example.demo.models.Location;
 import com.example.demo.models.Transportation;
 import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    @Cacheable(value = "routes", key = "#originLocationCode + '_' + #destinationLocationCode + '_' + #travelDate.toString()")
     public List<RouteDTO> findMatchingRoutes(
             String originLocationCode, String destinationLocationCode, LocalDate travelDate) {
         Location originLocation = locationRepository.findByLocationCode(originLocationCode)

@@ -3,9 +3,10 @@ package com.example.demo.dtos;
 import com.example.demo.models.Location;
 import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class LocationDTO {
+public class LocationDTO implements Serializable {
     private Long id;
     @NotBlank(message = "Name is required")
     private String name;

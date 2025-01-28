@@ -1,8 +1,9 @@
 package com.example.demo.dtos;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class RouteDTO {
+public class RouteDTO implements Serializable {
     private List<StopDTO> stops;
 
     public RouteDTO(List<StopDTO> stops) {

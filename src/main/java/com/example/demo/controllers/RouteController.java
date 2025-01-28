@@ -2,7 +2,6 @@ package com.example.demo.controllers;
 
 import com.example.demo.dtos.RouteDTO;
 import com.example.demo.services.RouteService;
-import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +24,9 @@ public class RouteController {
     // Get all locations
     @GetMapping
     public ResponseEntity<List<RouteDTO>> getMatchingRoutes(
-            @Valid @RequestParam String origin,
-            @Valid @RequestParam String destination,
-            @Valid @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) {
+            @RequestParam String origin,
+            @RequestParam String destination,
+            @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) {
         return ResponseEntity.ok(routeService.findMatchingRoutes(origin, destination, date));
     }
 

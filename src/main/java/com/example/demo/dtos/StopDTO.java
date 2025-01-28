@@ -2,7 +2,9 @@ package com.example.demo.dtos;
 
 import com.example.demo.enums.TransportationType;
 
-public class StopDTO {
+import java.io.Serializable;
+
+public class StopDTO implements Serializable {
     private int stopNumber;
     private LocationDTO location;
     private TransportationType transportationTypeToNext;
