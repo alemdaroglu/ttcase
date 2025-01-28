@@ -82,4 +82,18 @@ public class LocationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<LocationDTO>> createLocations(
+            @Valid @RequestBody List<LocationCreateDTO> locationCreateDTOs) {
+        List<Location> locations = locationCreateDTOs.stream()
+                .map(dto -> new Location(dto.getName(), dto.getCountry(), dto.getCity(), dto.getLocationCode()))
+                .collect(Collectors.toList());
+
+        List<Location> savedLocations = locationRepository.saveAll(locations);
+        List<LocationDTO> response = savedLocations.stream()
+                .map(LocationMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.status(201).body(response);
+    }
 }

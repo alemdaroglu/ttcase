@@ -29,7 +29,7 @@ public interface TransportationRepository extends JpaRepository<Transportation, 
             "JOIN t.operatingDays od " +
             "WHERE t.destinationLocation.id in :destinationLocationIds " +
             "AND t.originLocation.id in :originLocationIds " +
-            "AND t.transportationType == 'FLIGHT'" +
+            "AND t.transportationType = 'FLIGHT'" +
             "AND od = :dayOfWeek")
     List<Transportation> findUsableFlightsByOperatingDay(
             List<Long> originLocationIds, List<Long> destinationLocationIds, int dayOfWeek);

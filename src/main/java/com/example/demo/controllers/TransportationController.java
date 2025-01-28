@@ -7,7 +7,6 @@ import com.example.demo.models.Location;
 import com.example.demo.models.Transportation;
 import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
-import com.example.demo.utils.Utils;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +48,11 @@ public class TransportationController {
     // Create a new transportation
     @PostMapping
     public ResponseEntity<TransportationDTO> createTransportation(@Valid @RequestBody TransportationCreateDTO transportationCreateDTO) {
+        Location originLocation = locationRepository.findById(transportationCreateDTO.getOriginLocationId())
+                .orElseThrow(() -> new IllegalArgumentException("Origin location not found for ID: " + transportationCreateDTO.getOriginLocationId()));
+        Location destinationLocation = locationRepository.findById(transportationCreateDTO.getDestinationLocationId())
+                .orElseThrow(() -> new IllegalArgumentException("Destination location not found for ID: " + transportationCreateDTO.getDestinationLocationId()));
+
         Transportation transportation = TransportationMapper.toEntity(
                 transportationCreateDTO,
                 locationRepository);
@@ -95,4 +99,29 @@ public class TransportationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<TransportationDTO>> createTransportations(
+            @Valid @RequestBody List<TransportationCreateDTO> transportationCreateDTOs) {
+        List<Transportation> transportations = transportationCreateDTOs.stream().map(dto -> {
+            Location originLocation = locationRepository.findById(dto.getOriginLocationId())
+                    .orElseThrow(() -> new IllegalArgumentException("Origin location not found for ID: " + dto.getOriginLocationId()));
+            Location destinationLocation = locationRepository.findById(dto.getDestinationLocationId())
+                    .orElseThrow(() -> new IllegalArgumentException("Destination location not found for ID: " + dto.getDestinationLocationId()));
+
+            return new Transportation(
+                    originLocation,
+                    destinationLocation,
+                    dto.getTransportationType(),
+                    dto.getOperatingDays()
+            );
+        }).collect(Collectors.toList());
+
+        List<Transportation> savedTransportations = transportationRepository.saveAll(transportations);
+        List<TransportationDTO> response = savedTransportations.stream()
+                .map(TransportationMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.status(201).body(response);
+    }
+
 }
