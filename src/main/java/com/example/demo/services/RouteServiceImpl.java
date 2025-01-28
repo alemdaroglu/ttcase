@@ -29,7 +29,7 @@ public class RouteServiceImpl implements RouteService {
             String originLocationCode, String destinationLocationCode, LocalDate travelDate) {
         Location originLocation = locationRepository.findByLocationCode(originLocationCode)
                 .orElseThrow(() -> new IllegalArgumentException("Location with code " + originLocationCode + " not found"));
-        Location destinationLocation = locationRepository.findByLocationCode(originLocationCode)
+        Location destinationLocation = locationRepository.findByLocationCode(destinationLocationCode)
                 .orElseThrow(() -> new IllegalArgumentException("Location with code " + destinationLocationCode + " " +
                         "not found"));
 
