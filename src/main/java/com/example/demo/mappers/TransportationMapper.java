@@ -1,11 +1,9 @@
 package com.example.demo.mappers;
 
-import com.example.demo.dtos.LocationDTO;
 import com.example.demo.dtos.TransportationCreateDTO;
 import com.example.demo.dtos.TransportationDTO;
 import com.example.demo.models.Location;
 import com.example.demo.models.Transportation;
-import com.example.demo.models.TransportationOperatingDays;
 import com.example.demo.repositories.LocationRepository;
 
 public class TransportationMapper {
@@ -20,7 +18,7 @@ public class TransportationMapper {
                 LocationMapper.toDto(transportation.getOriginLocation()),
                 LocationMapper.toDto(transportation.getDestinationLocation()),
                 transportation.getTransportationType(),
-                TransportationOperatingDaysMapper.toDto(transportation.getOperatingDays()),
+                transportation.getOperatingDays(),
                 transportation.getCreatedAt(),
                 transportation.getUpdatedAt()
         );
@@ -35,7 +33,7 @@ public class TransportationMapper {
                 LocationMapper.toEntityWithId(transportationDTO.getOriginLocation()),
                 LocationMapper.toEntityWithId(transportationDTO.getDestinationLocation()),
                 transportationDTO.getTransportationType(),
-                TransportationOperatingDaysMapper.toEntity(transportationDTO.getOperatingDays())
+                transportationDTO.getOperatingDays()
         );
     }
 
@@ -77,13 +75,7 @@ public class TransportationMapper {
 
         // Set the operating days
         if (transportationCreateDTO.getOperatingDays() != null) {
-            TransportationOperatingDays operatingDays = TransportationOperatingDaysMapper.toEntity(transportationCreateDTO.getOperatingDays());
-
-            // Set the transportation reference in the operating days
-            operatingDays.setTransportation(transportation);
-
-            // Set the operating days to the transportation
-            transportation.setOperatingDays(operatingDays);
+            transportation.setOperatingDays(transportationCreateDTO.getOperatingDays());
         }
 
         return transportation;

@@ -2,15 +2,18 @@ package com.example.demo.dtos;
 
 import com.example.demo.enums.TransportationType;
 import com.example.demo.models.Transportation;
+import jakarta.validation.constraints.Size;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class TransportationDTO {
     private Long id; // Optional for responses
     private LocationDTO originLocation; // Full Location for responses
     private LocationDTO destinationLocation; // Full Location for responses
     private TransportationType transportationType;
-    private TransportationOperatingDaysDTO operatingDays; // Embedded operating days
+    private Set<Integer> operatingDays; // Embedded operating days
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -19,7 +22,7 @@ public class TransportationDTO {
     }
 
     public TransportationDTO(Long id, LocationDTO originLocation, LocationDTO destinationLocation,
-                             TransportationType transportationType, TransportationOperatingDaysDTO operatingDays,
+                             TransportationType transportationType, Set<Integer> operatingDays,
                              LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.originLocation = originLocation;
@@ -63,11 +66,11 @@ public class TransportationDTO {
         this.transportationType = transportationType;
     }
 
-    public TransportationOperatingDaysDTO getOperatingDays() {
+    public Set<Integer> getOperatingDays() {
         return operatingDays;
     }
 
-    public void setOperatingDays(TransportationOperatingDaysDTO operatingDays) {
+    public void setOperatingDays(Set<Integer> operatingDays) {
         this.operatingDays = operatingDays;
     }
     public LocalDateTime getCreatedAt() {

@@ -4,7 +4,9 @@ import com.example.demo.dtos.TransportationDTO;
 import com.example.demo.enums.TransportationType;
 import jakarta.persistence.*;
 
+import java.time.DayOfWeek;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -14,8 +16,10 @@ public class Transportation extends BaseEntity {
     @Enumerated(EnumType.STRING) // This ensures the enum is stored as a string in the database
     private TransportationType transportationType;
 
-    @OneToOne(mappedBy = "transportation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private TransportationOperatingDays operatingDays;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "transportation_operating_days", joinColumns = @JoinColumn(name = "transportation_id"))
+    @Column(name = "day_of_week")
+    private Set<Integer> operatingDays;
 
     @ManyToOne
     @JoinColumn(name = "origin_location_id", referencedColumnName = "id")
@@ -33,7 +37,7 @@ public class Transportation extends BaseEntity {
             Location originLocation,
             Location destinationLocation,
             TransportationType transportationType,
-            TransportationOperatingDays operatingDays) {
+            Set<Integer> operatingDays) {
         this.transportationType = transportationType;
         this.originLocation = originLocation;
         this.destinationLocation = destinationLocation;
@@ -66,14 +70,11 @@ public class Transportation extends BaseEntity {
         this.transportationType = transportationType;
     }
 
-    public TransportationOperatingDays getOperatingDays() {
+    public Set<Integer> getOperatingDays() {
         return operatingDays;
     }
 
-    public void setOperatingDays(TransportationOperatingDays operatingDays) {
-        if (operatingDays != null) {
-            operatingDays.setTransportation(this);
-        }
+    public void setOperatingDays(Set<Integer> operatingDays) {
         this.operatingDays = operatingDays;
     }
 

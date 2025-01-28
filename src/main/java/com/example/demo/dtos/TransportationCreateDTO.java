@@ -1,8 +1,11 @@
 package com.example.demo.dtos;
 
-import com.example.demo.dtos.TransportationOperatingDaysDTO;
 import com.example.demo.enums.TransportationType;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.time.DayOfWeek;
+import java.util.Set;
 
 public class TransportationCreateDTO {
     @NotNull(message = "Origin Location ID is required")
@@ -11,12 +14,11 @@ public class TransportationCreateDTO {
     private Long destinationLocationId;
     @NotNull
     private TransportationType transportationType;
-    @NotNull(message = "Operating days are required")
-    private TransportationOperatingDaysDTO operatingDays;
+    private Set<Integer> operatingDays;
 
     public TransportationCreateDTO() {}
 
-    public TransportationCreateDTO(Long originLocationId, Long destinationLocationId, TransportationType transportationType, TransportationOperatingDaysDTO operatingDays) {
+    public TransportationCreateDTO(Long originLocationId, Long destinationLocationId, TransportationType transportationType, Set<Integer> operatingDays) {
         this.originLocationId = originLocationId;
         this.destinationLocationId = destinationLocationId;
         this.transportationType = transportationType;
@@ -47,11 +49,11 @@ public class TransportationCreateDTO {
         this.transportationType = transportationType;
     }
 
-    public TransportationOperatingDaysDTO getOperatingDays() {
+    public Set<Integer> getOperatingDays() {
         return operatingDays;
     }
 
-    public void setOperatingDays(TransportationOperatingDaysDTO operatingDays) {
+    public void setOperatingDays(Set<Integer> operatingDays) {
         this.operatingDays = operatingDays;
     }
 }
