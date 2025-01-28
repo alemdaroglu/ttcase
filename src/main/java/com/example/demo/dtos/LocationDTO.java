@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class LocationDTO {
-    private Long id; // Optional for responses; can be null for creation
+    private Long id;
     @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Country is required")
