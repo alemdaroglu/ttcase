@@ -4,6 +4,8 @@ import com.example.demo.models.Transportation;
 import com.example.demo.models.TransportationOperatingDays;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.LocalDateTime;
+
 public class TransportationOperatingDaysDTO {
     private Boolean monday;
     private Boolean tuesday;
@@ -15,11 +17,16 @@ public class TransportationOperatingDaysDTO {
     @JsonIgnore
     private Transportation transportation;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     public TransportationOperatingDaysDTO() {
     }
 
     public TransportationOperatingDaysDTO(Boolean monday, Boolean tuesday, Boolean wednesday, Boolean thursday,
-                                          Boolean friday, Boolean saturday, Boolean sunday, Transportation transportation) {
+                                          Boolean friday, Boolean saturday, Boolean sunday,
+                                          Transportation transportation,
+                                          LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.monday = monday;
         this.tuesday = tuesday;
         this.wednesday = wednesday;
@@ -28,6 +35,8 @@ public class TransportationOperatingDaysDTO {
         this.saturday = saturday;
         this.sunday = sunday;
         this.transportation = transportation;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // Getters and setters
@@ -93,5 +102,12 @@ public class TransportationOperatingDaysDTO {
 
     public void setTransportation(Transportation transportation) {
         this.transportation = transportation;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

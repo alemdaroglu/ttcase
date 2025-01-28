@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dtos.LocationCreateDTO;
 import com.example.demo.dtos.LocationDTO;
 import com.example.demo.mappers.LocationMapper;
 import com.example.demo.models.Location;
@@ -43,8 +44,8 @@ public class LocationController {
 
     // Create a new location
     @PostMapping
-    public ResponseEntity<LocationDTO> createLocation(@Valid @RequestBody LocationDTO locationDTO) {
-        Location savedLocation = locationRepository.save(LocationMapper.toEntity(locationDTO));
+    public ResponseEntity<LocationDTO> createLocation(@Valid @RequestBody LocationCreateDTO locationCreateDTO) {
+        Location savedLocation = locationRepository.save(LocationMapper.toEntity(locationCreateDTO));
         return ResponseEntity.status(201).body(LocationMapper.toDto(savedLocation));
     }
 

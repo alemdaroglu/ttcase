@@ -18,7 +18,9 @@ public class TransportationOperatingDaysMapper {
                 operatingDays.getFriday(),
                 operatingDays.getSaturday(),
                 operatingDays.getSunday(),
-                operatingDays.getTransportation()
+                operatingDays.getTransportation(),
+                operatingDays.getCreatedAt(),
+                operatingDays.getUpdatedAt()
         );
     }
 

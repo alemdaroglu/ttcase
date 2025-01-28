@@ -8,12 +8,7 @@ import java.util.Objects;
 
 
 @Entity
-public class TransportationOperatingDays {
-
-    @Id
-    @GeneratedValue
-    @Column(name="id", nullable=false, unique=true)
-    private Long id;
+public class TransportationOperatingDays extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "transportation_id", nullable = false, unique = true)
@@ -62,11 +57,6 @@ public class TransportationOperatingDays {
     }
 
 
-    public Long getId() {
-        return this.id;
-    }
-
-
     public Boolean getMonday() {
         return this.monday;
     }
@@ -87,10 +77,6 @@ public class TransportationOperatingDays {
     }
     public Boolean getSunday() {
         return this.sunday;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setMonday(Boolean monday) {
@@ -129,7 +115,7 @@ public class TransportationOperatingDays {
             return true;
         if (!(o instanceof TransportationOperatingDays tod))
             return false;
-        return Objects.equals(this.id, tod.id)
+        return Objects.equals(super.getId(), tod.getId())
                 && Objects.equals(this.monday, tod.monday)
                 && Objects.equals(this.tuesday, tod.tuesday)
                 && Objects.equals(this.wednesday, tod.wednesday)
@@ -142,12 +128,12 @@ public class TransportationOperatingDays {
     @Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.monday, this.tuesday,
+                super.getId(), this.monday, this.tuesday,
                 this.wednesday, this.thursday, this.friday, this.saturday, this.sunday);
     }
 
     @Override
     public String toString() {
-        return "TOD{" + "id=" + this.id + '}';
+        return "TOD{" + "id=" + super.getId() + '}';
     }
 }

@@ -1,46 +1,32 @@
 package com.example.demo.dtos;
 
-import com.example.demo.models.Location;
 import jakarta.validation.constraints.NotBlank;
 
-import java.time.LocalDateTime;
+public class LocationCreateDTO {
 
-public class LocationDTO {
-    private Long id; // Optional for responses; can be null for creation
     @NotBlank(message = "Name is required")
     private String name;
+
     @NotBlank(message = "Country is required")
     private String country;
+
     @NotBlank(message = "City is required")
     private String city;
+
     @NotBlank(message = "Location Code is required")
     private String locationCode;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    public LocationDTO() {
+    public LocationCreateDTO() {
     }
 
-    public LocationDTO(Long id, String name, String country, String city, String locationCode, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public LocationCreateDTO(String name, String country, String city, String locationCode) {
         this.name = name;
         this.country = country;
         this.city = city;
         this.locationCode = locationCode;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -71,13 +57,5 @@ public class LocationDTO {
 
     public void setLocationCode(String locationCode) {
         this.locationCode = locationCode;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }

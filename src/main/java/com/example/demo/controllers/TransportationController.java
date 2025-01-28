@@ -2,18 +2,21 @@ package com.example.demo.controllers;
 
 import com.example.demo.dtos.TransportationCreateDTO;
 import com.example.demo.dtos.TransportationDTO;
-import com.example.demo.mappers.TransportationCreateMapper;
+import com.example.demo.dtos.TransportationOperatingDaysDTO;
 import com.example.demo.mappers.TransportationMapper;
-import com.example.demo.mappers.TransportationOperatingDaysMapper;
 import com.example.demo.models.Location;
 import com.example.demo.models.Transportation;
+import com.example.demo.models.TransportationOperatingDays;
 import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
+import com.example.demo.utils.Utils;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +54,7 @@ public class TransportationController {
     // Create a new transportation
     @PostMapping
     public ResponseEntity<TransportationDTO> createTransportation(@Valid @RequestBody TransportationCreateDTO transportationCreateDTO) {
-        Transportation transportation = TransportationCreateMapper.toEntity(
+        Transportation transportation = TransportationMapper.toEntity(
                 transportationCreateDTO,
                 locationRepository);
         Transportation savedTransportation = transportationRepository.save(transportation);
@@ -79,9 +82,15 @@ public class TransportationController {
                         existingTransportation.setTransportationType(updatedTransportation.getTransportationType());
                     }
                     if (updatedTransportation.getOperatingDays() != null) {
-                        existingTransportation.setOperatingDays(
-                                TransportationOperatingDaysMapper.toEntity(updatedTransportation.getOperatingDays())
-                        );
+                        TransportationOperatingDays existingOperatingDays = existingTransportation.getOperatingDays();
+                        TransportationOperatingDaysDTO newOperatingDaysDTO = updatedTransportation.getOperatingDays();
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getMonday(), existingOperatingDays::setMonday);
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getTuesday(), existingOperatingDays::setTuesday);
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getWednesday(), existingOperatingDays::setWednesday);
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getThursday(), existingOperatingDays::setThursday);
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getFriday(), existingOperatingDays::setFriday);
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getSaturday(), existingOperatingDays::setSaturday);
+                        Utils.updateIfNotNull(newOperatingDaysDTO.getSunday(), existingOperatingDays::setSunday);
                     }
                     Transportation savedTransportation = transportationRepository.save(existingTransportation);
                     return ResponseEntity.ok(TransportationMapper.toDto(savedTransportation));

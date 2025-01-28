@@ -10,12 +10,7 @@ import java.util.Objects;
 
 
 @Entity
-public class Location {
-
-    @Id
-    @GeneratedValue
-    @Column(name="id", nullable=false, unique=true)
-    private Long id;
+public class Location extends BaseEntity {
 
     @Column(name="name", nullable=false)
     private String name;
@@ -37,12 +32,6 @@ public class Location {
         this.locationCode = locationCode;
     }
 
-
-
-    public Long getId() {
-        return this.id;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -57,10 +46,6 @@ public class Location {
 
     public String getLocationCode() {
         return locationCode;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -85,7 +70,7 @@ public class Location {
             return true;
         if (!(o instanceof Location location))
             return false;
-        return Objects.equals(this.id, location.id)
+        return Objects.equals(super.getId(), location.getId())
                 && Objects.equals(this.name, location.name)
                 && Objects.equals(this.country, location.country)
                 && Objects.equals(this.city, location.city)
@@ -94,11 +79,11 @@ public class Location {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.country, this.city, this.locationCode);
+        return Objects.hash(super.getId(), this.name, this.country, this.city, this.locationCode);
     }
 
     @Override
     public String toString() {
-        return "Location{" + "id=" + this.id + '}';
+        return "Location{" + "id=" + super.getId() + '}';
     }
 }

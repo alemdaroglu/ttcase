@@ -3,6 +3,8 @@ package com.example.demo.dtos;
 import com.example.demo.enums.TransportationType;
 import com.example.demo.models.Transportation;
 
+import java.time.LocalDateTime;
+
 public class TransportationDTO {
     private Long id; // Optional for responses
     private LocationDTO originLocation; // Full Location for responses
@@ -10,15 +12,22 @@ public class TransportationDTO {
     private TransportationType transportationType;
     private TransportationOperatingDaysDTO operatingDays; // Embedded operating days
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     public TransportationDTO() {
     }
 
-    public TransportationDTO(Long id, LocationDTO originLocation, LocationDTO destinationLocation, TransportationType transportationType, TransportationOperatingDaysDTO operatingDays) {
+    public TransportationDTO(Long id, LocationDTO originLocation, LocationDTO destinationLocation,
+                             TransportationType transportationType, TransportationOperatingDaysDTO operatingDays,
+                             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.originLocation = originLocation;
         this.destinationLocation = destinationLocation;
         this.transportationType = transportationType;
         this.operatingDays = operatingDays;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // Getters and setters
@@ -60,5 +69,12 @@ public class TransportationDTO {
 
     public void setOperatingDays(TransportationOperatingDaysDTO operatingDays) {
         this.operatingDays = operatingDays;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

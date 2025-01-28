@@ -8,12 +8,7 @@ import java.util.Objects;
 
 
 @Entity
-public class Transportation {
-
-    @Id
-    @GeneratedValue
-    @Column(name="id", nullable=false, unique=true)
-    private Long id;
+public class Transportation extends BaseEntity {
 
     @Column(name = "transportation_type", nullable = false)
     @Enumerated(EnumType.STRING) // This ensures the enum is stored as a string in the database
@@ -46,10 +41,6 @@ public class Transportation {
     }
 
 
-    public Long getId() {
-        return this.id;
-    }
-
     public Location getOriginLocation() {
         return this.originLocation;
     }
@@ -58,13 +49,8 @@ public class Transportation {
         return this.destinationLocation;
     }
 
-
     public TransportationType getTransportationType() {
         return transportationType;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setOriginLocation(Location originLocation) {
@@ -97,19 +83,19 @@ public class Transportation {
             return true;
         if (!(o instanceof Transportation transportation))
             return false;
-        return Objects.equals(this.id, transportation.id)
+        return Objects.equals(super.getId(), transportation.getId())
                 && Objects.equals(this.transportationType, transportation.transportationType);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                this.id,
+                super.getId(),
                 this.transportationType);
     }
 
     @Override
     public String toString() {
-        return "Transportation{" + "id=" + this.id + '}';
+        return "Transportation{" + "id=" + super.getId() + '}';
     }
 }

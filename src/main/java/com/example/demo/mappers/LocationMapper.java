@@ -1,5 +1,6 @@
 package com.example.demo.mappers;
 
+import com.example.demo.dtos.LocationCreateDTO;
 import com.example.demo.dtos.LocationDTO;
 import com.example.demo.models.Location;
 
@@ -15,11 +16,13 @@ public class LocationMapper {
                 location.getName(),
                 location.getCountry(),
                 location.getCity(),
-                location.getLocationCode()
+                location.getLocationCode(),
+                location.getCreatedAt(),
+                location.getUpdatedAt()
         );
     }
 
-    // Convert LocationDTO to Location entity (for creation, without ID)
+
     public static Location toEntity(LocationDTO locationDTO) {
         if (locationDTO == null) {
             return null;
@@ -30,6 +33,16 @@ public class LocationMapper {
                 locationDTO.getCity(),
                 locationDTO.getLocationCode()
         );
+    }
+
+    // Convert LocationDTO to Location entity (for creation, without ID)
+    public static Location toEntity(LocationCreateDTO locationCreateDTO) {
+        Location location = new Location();
+        location.setName(locationCreateDTO.getName());
+        location.setCountry(locationCreateDTO.getCountry());
+        location.setCity(locationCreateDTO.getCity());
+        location.setLocationCode(locationCreateDTO.getLocationCode());
+        return location;
     }
 
     // Convert LocationDTO to Location entity (for update, with ID)
