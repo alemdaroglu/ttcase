@@ -1,18 +1,17 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.RouteDTO;
+import com.example.demo.dtos.StopDTO;
+import com.example.demo.mappers.LocationMapper;
 import com.example.demo.models.Location;
+import com.example.demo.models.Transportation;
 import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RouteServiceImpl implements RouteService {
@@ -27,12 +26,14 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public List<RouteDTO> findMatchingRoutes(
-            String originLocationCode, String destinationLocationCode, Date travelDate) {
+            String originLocationCode, String destinationLocationCode, LocalDate travelDate) {
         Location originLocation = locationRepository.findByLocationCode(originLocationCode)
                 .orElseThrow(() -> new IllegalArgumentException("Location with code " + originLocationCode + " not found"));
         Location destinationLocation = locationRepository.findByLocationCode(originLocationCode)
                 .orElseThrow(() -> new IllegalArgumentException("Location with code " + destinationLocationCode + " " +
                         "not found"));
+
+        int dayOfWeek = travelDate.getDayOfWeek().getValue();
 
         boolean beforeFlight = false;
         boolean afterFlight = false;
@@ -43,10 +44,118 @@ public class RouteServiceImpl implements RouteService {
         if (destinationLocation.getLocationCode().length() != 3) {
             afterFlight = true;
         }
-        // find available airports
+        // find usable flights
+        // çıkış noktasına destination olarak bağlı olan tüm havaalanları
+        // varış noktasına origin olarak bağlı olan tüm havaalanları
+        // bu ikisinin kombinasyonları flight transportation olarak tanımlı mı bak
+        List<Transportation> beforeTransfers =
+                transportationRepository.findUsableAirportsByOriginLocationIdAndOperatingDay(
+                        originLocation.getId(), dayOfWeek);
 
+        List<Transportation> afterTransfers =
+                transportationRepository.findUsableAirportsByDestinationLocationIdAndOperatingDay(
+                        destinationLocation.getId(), dayOfWeek);
 
+        Set<Location> beforeAirports = beforeTransfers.stream().map(Transportation::getDestinationLocation).collect(Collectors.toSet());
+        Set<Location> afterAirports =
+                afterTransfers.stream().map(Transportation::getOriginLocation).collect(Collectors.toSet());
 
-        return new ArrayList<RouteDTO>();
+        if (!beforeFlight){
+            beforeAirports.add(originLocation);
+        }
+        if (!afterFlight){
+            afterAirports.add(destinationLocation);
+        }
+        List<Long> originIds = beforeAirports.stream().map(Location::getId).collect(Collectors.toList());
+        List<Long> destinationIds = afterAirports.stream().map(Location::getId).collect(Collectors.toList());
+        List<Transportation> usableFlights =
+                transportationRepository.findUsableFlightsByOperatingDay(
+                        originIds, destinationIds, dayOfWeek);
+
+        List<RouteDTO> result = new ArrayList<>();
+        // 4 stops
+        for (Transportation usableFlight : usableFlights) {
+            for (Transportation beforeTransfer : beforeTransfers) {
+                for (Transportation afterTransfer : afterTransfers) {
+                    if (beforeTransfer.getDestinationLocation().getId().equals(usableFlight.getOriginLocation().getId()) &&
+                    afterTransfer.getOriginLocation().getId().equals(usableFlight.getDestinationLocation().getId())) {
+                        StopDTO stop1 = new StopDTO();
+                        stop1.setLocation(LocationMapper.toDto(beforeTransfer.getOriginLocation()));
+                        stop1.setStopNumber(1);
+                        stop1.setTransportationTypeToNext(beforeTransfer.getTransportationType());
+                        StopDTO stop2 = new StopDTO();
+                        stop2.setLocation(LocationMapper.toDto(usableFlight.getOriginLocation()));
+                        stop2.setStopNumber(2);
+                        stop2.setTransportationTypeToNext(usableFlight.getTransportationType());
+                        StopDTO stop3 = new StopDTO();
+                        stop3.setLocation(LocationMapper.toDto(afterTransfer.getOriginLocation()));
+                        stop3.setStopNumber(3);
+                        stop3.setTransportationTypeToNext(afterTransfer.getTransportationType());
+                        StopDTO stop4 = new StopDTO();
+                        stop4.setLocation(LocationMapper.toDto(afterTransfer.getDestinationLocation()));
+                        stop4.setStopNumber(4);
+                        result.add(new RouteDTO(Arrays.asList(stop1, stop2, stop3, stop4)));
+                    }
+                }
+            }
+        }
+
+        // 3 stops
+        if (!beforeFlight) {
+            for (Transportation usableFlight : usableFlights) {
+                for (Transportation afterTransfer : afterTransfers) {
+                    if (usableFlight.getDestinationLocation().getId().equals(afterTransfer.getOriginLocation().getId())){
+                        StopDTO stop1 = new StopDTO();
+                        stop1.setLocation(LocationMapper.toDto(usableFlight.getOriginLocation()));
+                        stop1.setStopNumber(1);
+                        stop1.setTransportationTypeToNext(usableFlight.getTransportationType());
+                        StopDTO stop2 = new StopDTO();
+                        stop2.setLocation(LocationMapper.toDto(afterTransfer.getOriginLocation()));
+                        stop2.setStopNumber(2);
+                        stop2.setTransportationTypeToNext(afterTransfer.getTransportationType());
+                        StopDTO stop3 = new StopDTO();
+                        stop3.setLocation(LocationMapper.toDto(afterTransfer.getDestinationLocation()));
+                        stop3.setStopNumber(3);
+                        result.add(new RouteDTO(Arrays.asList(stop1, stop2, stop3)));
+                    }
+                }
+            }
+        }
+        if (!afterFlight) {
+            for (Transportation usableFlight : usableFlights) {
+                for (Transportation beforeTransfer : beforeTransfers) {
+                    if (usableFlight.getOriginLocation().getId().equals(beforeTransfer.getDestinationLocation().getId())){
+                        StopDTO stop1 = new StopDTO();
+                        stop1.setLocation(LocationMapper.toDto(beforeTransfer.getOriginLocation()));
+                        stop1.setStopNumber(1);
+                        stop1.setTransportationTypeToNext(beforeTransfer.getTransportationType());
+                        StopDTO stop2 = new StopDTO();
+                        stop2.setLocation(LocationMapper.toDto(usableFlight.getOriginLocation()));
+                        stop2.setStopNumber(2);
+                        stop2.setTransportationTypeToNext(usableFlight.getTransportationType());
+                        StopDTO stop3 = new StopDTO();
+                        stop3.setLocation(LocationMapper.toDto(usableFlight.getDestinationLocation()));
+                        stop3.setStopNumber(3);
+                        result.add(new RouteDTO(Arrays.asList(stop1, stop2, stop3)));
+                    }
+                }
+            }
+        }
+
+        // 2 stops
+        if (!beforeFlight && !afterFlight) {
+            for (Transportation usableFlight : usableFlights) {
+                StopDTO stop1 = new StopDTO();
+                stop1.setLocation(LocationMapper.toDto(usableFlight.getOriginLocation()));
+                stop1.setStopNumber(1);
+                stop1.setTransportationTypeToNext(usableFlight.getTransportationType());
+                StopDTO stop2 = new StopDTO();
+                stop2.setLocation(LocationMapper.toDto(usableFlight.getDestinationLocation()));
+                stop2.setStopNumber(2);
+                result.add(new RouteDTO(Arrays.asList(stop1, stop2)));
+            }
+        }
+
+        return result;
     }
 }

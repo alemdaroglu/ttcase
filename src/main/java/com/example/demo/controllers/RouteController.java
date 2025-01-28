@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,7 +27,7 @@ public class RouteController {
     public ResponseEntity<List<RouteDTO>> getMatchingRoutes(
             @Valid @RequestParam String origin,
             @Valid @RequestParam String destination,
-            @Valid @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+            @Valid @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) {
         return ResponseEntity.ok(routeService.findMatchingRoutes(origin, destination, date));
     }
 
