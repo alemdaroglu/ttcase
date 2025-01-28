@@ -145,14 +145,17 @@ public class RouteServiceImpl implements RouteService {
         // 2 stops
         if (!beforeFlight && !afterFlight) {
             for (Transportation usableFlight : usableFlights) {
-                StopDTO stop1 = new StopDTO();
-                stop1.setLocation(LocationMapper.toDto(usableFlight.getOriginLocation()));
-                stop1.setStopNumber(1);
-                stop1.setTransportationTypeToNext(usableFlight.getTransportationType());
-                StopDTO stop2 = new StopDTO();
-                stop2.setLocation(LocationMapper.toDto(usableFlight.getDestinationLocation()));
-                stop2.setStopNumber(2);
-                result.add(new RouteDTO(Arrays.asList(stop1, stop2)));
+                if (usableFlight.getOriginLocation().getId().equals(originLocation.getId()) &&
+                usableFlight.getDestinationLocation().getId().equals(destinationLocation.getId())) {
+                    StopDTO stop1 = new StopDTO();
+                    stop1.setLocation(LocationMapper.toDto(usableFlight.getOriginLocation()));
+                    stop1.setStopNumber(1);
+                    stop1.setTransportationTypeToNext(usableFlight.getTransportationType());
+                    StopDTO stop2 = new StopDTO();
+                    stop2.setLocation(LocationMapper.toDto(usableFlight.getDestinationLocation()));
+                    stop2.setStopNumber(2);
+                    result.add(new RouteDTO(Arrays.asList(stop1, stop2)));
+                }
             }
         }
 
