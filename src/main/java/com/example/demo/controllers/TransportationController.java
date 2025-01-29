@@ -9,6 +9,7 @@ import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transportations")
+@PreAuthorize("hasRole('ADMIN')")
 public class TransportationController {
 
     private final TransportationRepository transportationRepository;

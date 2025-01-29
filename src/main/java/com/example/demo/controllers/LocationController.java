@@ -7,6 +7,7 @@ import com.example.demo.models.Location;
 import com.example.demo.repositories.LocationRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/locations")
+@PreAuthorize("hasRole('ADMIN')")
 public class LocationController {
 
     private final LocationRepository locationRepository;

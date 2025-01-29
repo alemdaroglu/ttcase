@@ -148,4 +148,5 @@ databaseChangeLog:
         referencedColumnNames: id
         referencedTableName: location
         validate: true
-
+- include:
+      file: db/changelog/001-create-users-table.yaml
