@@ -28,6 +28,7 @@ public class LocationController {
 
     // Get all locations
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'AGENCY')")
     public ResponseEntity<List<LocationDTO>> getAllLocations() {
         return ResponseEntity.ok(locationRepository.findAll()
                 .stream()
