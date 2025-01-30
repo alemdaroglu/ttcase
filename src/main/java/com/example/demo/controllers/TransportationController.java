@@ -8,12 +8,17 @@ import com.example.demo.models.Transportation;
 import com.example.demo.repositories.LocationRepository;
 import com.example.demo.repositories.TransportationRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.demo.utils.PaginationUtils.getPageable;
 
 @RestController
 @RequestMapping("/api/transportations")
@@ -31,11 +36,15 @@ public class TransportationController {
 
     // Get all transportations
     @GetMapping
-    public ResponseEntity<List<TransportationDTO>> getAllTransportations() {
-        return ResponseEntity.ok(transportationRepository.findAll()
-                .stream()
-                .map(TransportationMapper::toDto)
-                .collect(Collectors.toList()));
+    public ResponseEntity<Page<TransportationDTO>> getAllTransportations(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending
+    ) {
+        Pageable pageable = getPageable(page, size, sortBy, ascending);
+        Page<Transportation> transportations = transportationRepository.findAll(pageable);
+        return ResponseEntity.ok(transportations.map(TransportationMapper::toDto));
     }
 
     // Get a single transportation by ID

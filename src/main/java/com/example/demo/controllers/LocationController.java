@@ -3,9 +3,14 @@ package com.example.demo.controllers;
 import com.example.demo.dtos.LocationCreateDTO;
 import com.example.demo.dtos.LocationDTO;
 import com.example.demo.mappers.LocationMapper;
+import com.example.demo.mappers.TransportationMapper;
 import com.example.demo.models.Location;
+import com.example.demo.models.Transportation;
 import com.example.demo.repositories.LocationRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.example.demo.utils.PaginationUtils.getPageable;
 
 @RestController
 @RequestMapping("/api/locations")
@@ -29,11 +36,15 @@ public class LocationController {
     // Get all locations
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'AGENCY')")
-    public ResponseEntity<List<LocationDTO>> getAllLocations() {
-        return ResponseEntity.ok(locationRepository.findAll()
-                .stream()
-                .map(LocationMapper::toDto)
-                .collect(Collectors.toList()));
+    public ResponseEntity<Page<LocationDTO>> getAllLocations(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending
+    ) {
+        Pageable pageable = getPageable(page, size, sortBy, ascending);
+        Page<Location> locations = locationRepository.findAll(pageable);
+        return ResponseEntity.ok(locations.map(LocationMapper::toDto));
     }
 
     // Get a single location by ID
